@@ -4,7 +4,7 @@ def createNewClue(originalClue, entry):
     # Or implement a embeded algorithm that generate clues, which is very hard thing to do.
     # Rather use the following methods, 
     
-    #Meriam-Webster website,Oxford's dictionary can be used.
+    #Meriam-Webster website,Oxford's dictionary, wordnet can be used.
     
     # Couple things to be careful about.
     #Misspelled Word Scenario (In NYT puzzle, words are not always real ones. Return failure when this is the case)
@@ -13,7 +13,7 @@ def createNewClue(originalClue, entry):
     #Abbreviation Scenario
     #Foreign Word Scenario
     #Proper Scenario: If all these conditions are successfully met, we announce success.
-    #Wordnet can be used as well with the same conditions.
+ 
     
     
     return originalClue
