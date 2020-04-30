@@ -48,29 +48,31 @@ def createNewClue(generatedClue, entry):
         
         # ---------- Check if the word is not changed by Merriam -------------
         plurality_condition = False
-        element_word_input=driver.find_element_by_xpath('/html/body/div[2]/ul[1]/li[1]/b'
+        element_word_output=driver.find_element_by_xpath('/html/body/div[2]/ul[1]/li[1]/b')
                                                     
-        if element_word_input.lower() != word:
+        if element_word_output.lower() != word:
             print('The input \'' + word + '\' and dictionary word \'' + 
-                  element_word_input + '\' ' + RED + 'do not match' + END + '.')
+                  element_word_output + '\' ' + RED + 'do not match' + END + '.')
 # ------------------------------------------ABOVE THIS LINE IS ADJUSTED-----------------------------------------------------------------------------------------
-            index_found = word.find(element_word_input.split(' ')[0]) # Does the element_word_input contain the keyword.
+            index_found = word.find(element_word_output.split(' ')[0]) # Does the element_word_output contain the keyword.
             if index_found != -1: # if it contains the keyword then,
-                if (element_word_input + 's') != word and (element_word_input + 'es') != word: # check if is not plural with 's', 'es' then,
+                if (element_word_output + 's') != word or (element_word_output + 'es') != word: # check if is not plural with 's', 'es' then,
                     # asyet -> yet
-                    print('The words \'' + word + '\' and \'' + element_word_input + 
+                    print('The words \'' + word + '\' and \'' + element_word_output + 
                           '\' are ' + RED + 'irrelevant' + END + '.\n')
                     generatedClue = -1
                     return generatedClue
+                 elseif (element_word_output +'s') == word or (element_word_output + 'es') == word):
                 # apples -> apple
                 print('Keyword \'' + word + '\' is the plural form of \'' + 
-                      element_word_input + '\'.\n')
-                plural = True
+                      element_word_output + '\'.\n')
+                plural_condition = True
             else:
+                #Webstie Output, aka element_word_output, of Wordnet does not contain searched word
                 clue = -1
                 return clue
         # ---------------------------------------------------------------------
-   
+# ------------------------------------------ABOVE THIS LINE IS ADJUSTED-----------------------------------------------------------------------------------------
     
     
         # ---------- Get possible clues -----------------------
