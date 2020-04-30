@@ -1,4 +1,4 @@
-def createNewClue(generatedClue, entry):
+def createNewClue(generatedClues, entry):
     # We will search the word not clue! Easiest way.
     # Either We can directly get data of google, wikipedia or something else with simulated annealing algorithm.
     # Or implement a embeded algorithm that generate clues, which is very hard thing to do.
@@ -14,7 +14,6 @@ def createNewClue(generatedClue, entry):
     #Foreign Word Scenario
     #Proper Scenario: If all these conditions are successfully met, we announce success.
     
-    def webster(word,nyClue):
 
     driver = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver")
     
@@ -28,111 +27,76 @@ def createNewClue(generatedClue, entry):
     driver.get('http://wordnetweb.princeton.edu/perl/webwn')
     
     textBox = driver.find_element_by_id('s')
-    textBox.send_keys(word)
+    textBox.send_keys(entry)
     SearchWordNet_Button=WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/form[1]/input[2]")))
     SearchWordNet_Button.click()
     print('Keyword has been entered.\n')
     
-    # False if word is not avaliable.
-    generatedClue = -1
+    # False if entry is not avaliable.
+    generatedClues = -1
     elementValid = driver.find_element_by_xpath('/html/body/h3').text()
     if len(elementValid) > 0:
-        print('The word \'' + word + '\' ' + 
+        print('The entry \'' + entry + '\' ' + 
               RED + 'is not found' + END + ' in Worldnet.\n')
-        generatedClue = -1
+        generatedClues = -1
     else:
         # --------- Get the output of Wordnet to check it afterwards ------------------------------
-        element_word_output = driver.find_element_by_xpath('/html/body/div[2]/ul[1]/li[1]/b').text()
+        element_entry_output = driver.find_element_by_xpath('/html/body/div[2]/ul[1]/li[1]/b')
        
         
-        # ---------- Check if the word is not changed by Wordnet, for example cars ---> car ----------------------------------
+        # ---------- Check if the entry is not changed by Wordnet, for example cars ---> car ----------------------------------
         plurality_condition = False                                              
-        if element_word_output.lower() != word:
-            print('The input \'' + word + '\' and dictionary word \'' + 
-                  element_word_output + '\' ' + RED + 'do not match' + END + '.')
+        if element_entry_output.lower() != entry:
+            print('The input \'' + entry + '\' and dictionary entry \'' + 
+                  element_entry_output + '\' ' + RED + 'do not match' + END + '.')
 # ------------------------------------------ABOVE THIS LINE IS ADJUSTED-----------------------------------------------------------------------------------------
-            index_found = word.find(element_word_output.split(' ')[0]) # Does the element_word_output contain the keyword.
+            index_found = entry.find(element_entry_output.split(' ')[0]) # Does the element_entry_output contain the keyword.
             if index_found != -1: # if it contains the keyword then,
-                if (element_word_output + 's') != word or (element_word_output + 'es') != word: # check if is not plural with 's', 'es' then,
+                if (element_entry_output + 's') != entry or (element_entry_output + 'es') != entry: # check if is not plural with 's', 'es' then,
                     # cars--->apple
-                    print('The words \'' + word + '\' and \'' + element_word_output + 
+                    print('The words \'' + entry + '\' and \'' + element_entry_output + 
                           '\' are ' + RED + 'irrelevant' + END + '.\n')
-                    generatedClue = -1
-                    return generatedClue
-                 elseif (element_word_output +'s') == word or (element_word_output + 'es') == word):
+                    generatedClues = -1
+                    return generatedClues
+                 elseif (element_entry_output +'s') == entry or (element_entry_output + 'es') == entry):
                 # apples -> apple
-                print('Keyword \'' + word + '\' is the plural form of \'' + 
-                      element_word_output + '\'.\n')
+                print('Keyword \'' + entry + '\' is the plural form of \'' + 
+                      element_entry_output + '\'.\n')
                 plural_condition = True
             else:
-                #Webstie Output, aka element_word_output, of Wordnet does not contain searched word
-                clue = -1
-                return clue
-        # ---------------------------------------------------------------------
-# ------------------------------------------ABOVE THIS LINE IS ADJUSTED-----------------------------------------------------------------------------------------
-    
+                #Webstie Output, aka element_entry_output, of Wordnet does not contain searched entry
+                generatedClues = -1
+                return generatedClues
+       
     
         # ---------- Get possible clues -----------------------
-        possibleClue_xpath_index = driver.find_element_by_xpath('/html/body/div[2]/ul[1]/li[1]/text()[3]')
-        possibleClue = possibleClue_xpath_index.text
-        
-        print('Possible clues are listed below:')
-        possibleClue = []
-        if len(element1)==0:
-            element1 = element0.find_elements_by_class_name("unText")
-            for x in element1:
-                if x.text.find('—') != -1:
-                    # Filter example sentences which include keyword.
-                    line = x.text.split("\n")[0]
-                    
-                    # Filter ':' from definition.
-                    line = line[2:len(line)]
-                    if plural:    
-                        clue.append(line + ' (plural)')
-                    else:
-                        clue.append(line)
-                else:
-                    if len(element0.find_elements_by_class_name("num")) == 0:
-                        # List abbrev
-                        clue.append(x.text + ' (abbreviation)')
-                    else:
-                        clue.append(x.text)
-        else:
-            for x in element1:
-                if x.text.find(':') != -1:
-                    # Filter example sentences which include keyword.
-                    line = x.text.split("\n")[0]
-                    
-                    # Filter ':' from definition.
-                    line = line[2:len(line)]
-                    if plural:    
-                        clue.append(line + ' (plural)')
-                    else:
-                        clue.append(line)
-                else:
-                    if len(element0.find_elements_by_class_name("num")) == 0:
-                        # List abbrev
-                        clue.append(x.text + ' (abbreviation)')
-                    else:
-                        if(x.text[0]=='—'):
-                            continue
-                        else:
-                            clue.append(x.text)
+        generatedClues=[]
+        possibleClue = driver.find_element_by_xpath('/html/body/div[2]/ul[1]/li[1]').text()# first definition
+        if plural_condition:
+                generatedClues.append(line + '(Plural)')
+             else:
+                generatedClues.append(line)
+ 
+        #possibleClue = driver.find_element_by_xpath('/html/body/div[2]/ul/li['+ num2str(indx) + ']').text()
             
-        #Check clue language
-        element_lang = driver.find_element_by_class_name("fl")
-        element_def= element_lang.text.split(' ')[0]
-        if (element_def != "noun" and element_def != "verb" and element_def != "adverb" and element_def != "adjective" and element_def != "noun," and element_def != "verb," and element_def != "adverb," and element_def != "adjective," and element_def != "abbreviation"):
-            for x in range(len(clue)):
-                clue[x]= clue[x]+ " in "+ element_def
-        
-        for i in range(len(clue)):
-            print(str(i) + ') ' + clue[i])
-        print("")
-        clue = clueFilter(header, nyClue, clue)
-        print("")
-        
-    return clue
+            #For example sentences
+            possibleClue = driver.find_element_by_xpath('/html/body/div[2]/ul[2]/li[2]/i').text()
+            #filter example sentence
+            line=possibleClue.split(' ')
+            i=0;
+            for x in line:
+            i+=1
+            if entry == x:
+                possibleClue=possibleClue.strip(line[i-1])
+                line[i-1]="...."
+                
+             if plural_condition:
+                generatedClues.append(line + '(Plural)')
+             else:
+                generatedClues.append(line)
+         
     
 
-    return generatedClue
+    
+
+    return generatedClues
