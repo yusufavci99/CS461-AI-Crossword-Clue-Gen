@@ -13,16 +13,17 @@ def createNewClue(generatedClue, entry):
     #Abbreviation Scenario
     #Foreign Word Scenario
     #Proper Scenario: If all these conditions are successfully met, we announce success.
+    
+    def webster(word,nyClue):
 
     driver = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver")
-    Definitions=[] #List to store name of the product
-    Ranks=[] #List to store price of the product
+    
     driver.get("http://wordnetweb.princeton.edu/perl/webwn")
     ## Click on Frequency Counts to rank clues easy to hard. Hard or easy ones might be optional for the user.
     showfreq = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/form[2]/select/option[4]")))
-    
     showfreq.click()
-    def webster(word,nyClue):
+    
+    
     print("Searching in http://wordnetweb.princeton.edu/perl/webwn...")
     driver.get('http://wordnetweb.princeton.edu/perl/webwn')
     
@@ -34,22 +35,18 @@ def createNewClue(generatedClue, entry):
     
     # False if word is not avaliable.
     generatedClue = -1
-    elementValid = driver.FindElement(By.XPath(“.//*[text()='Your search did not return any results.'] ”))
+    elementValid = driver.find_element_by_xpath('/html/body/h3').text()
     if len(elementValid) > 0:
         print('The word \'' + word + '\' ' + 
               RED + 'is not found' + END + ' in Worldnet.\n')
         generatedClue = -1
     else:
-        # --------- Get the possible clues -------------------------------
-        worddefCounter=1# For now taking only first definition of the word
-        possibleClue = driver.find_element_by_xpath('/html/body/div[2]/ul[1]/li[' + num2str(worddefCounter) + ']/text()[3]'
-        # -----------------------------------------------------
+        # --------- Get the output of Wordnet to check it afterwards ------------------------------
+        element_word_output = driver.find_element_by_xpath('/html/body/div[2]/ul[1]/li[1]/b').text()
+       
         
-        
-        # ---------- Check if the word is not changed by Merriam -------------
-        plurality_condition = False
-        element_word_output=driver.find_element_by_xpath('/html/body/div[2]/ul[1]/li[1]/b')
-                                                    
+        # ---------- Check if the word is not changed by Wordnet, for example cars ---> car ----------------------------------
+        plurality_condition = False                                              
         if element_word_output.lower() != word:
             print('The input \'' + word + '\' and dictionary word \'' + 
                   element_word_output + '\' ' + RED + 'do not match' + END + '.')
@@ -57,7 +54,7 @@ def createNewClue(generatedClue, entry):
             index_found = word.find(element_word_output.split(' ')[0]) # Does the element_word_output contain the keyword.
             if index_found != -1: # if it contains the keyword then,
                 if (element_word_output + 's') != word or (element_word_output + 'es') != word: # check if is not plural with 's', 'es' then,
-                    # asyet -> yet
+                    # cars--->apple
                     print('The words \'' + word + '\' and \'' + element_word_output + 
                           '\' are ' + RED + 'irrelevant' + END + '.\n')
                     generatedClue = -1
@@ -76,11 +73,11 @@ def createNewClue(generatedClue, entry):
     
     
         # ---------- Get possible clues -----------------------
-        element0 = driver.find_element_by_class_name("vg")
+        possibleClue_xpath_index = driver.find_element_by_xpath('/html/body/div[2]/ul[1]/li[1]/text()[3]')
+        possibleClue = possibleClue_xpath_index.text
         
-        element1 = element0.find_elements_by_class_name("dtText")
         print('Possible clues are listed below:')
-        clue = []
+        possibleClue = []
         if len(element1)==0:
             element1 = element0.find_elements_by_class_name("unText")
             for x in element1:
