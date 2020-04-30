@@ -1,4 +1,4 @@
-def createNewClue(generatedClues, entry):
+def Wordnet(generatedClues, entry):
     # We will search the word not clue! Easiest way.
     # Either We can directly get data of google, wikipedia or something else with simulated annealing algorithm.
     # Or implement a embeded algorithm that generate clues, which is very hard thing to do.
@@ -95,8 +95,7 @@ def createNewClue(generatedClues, entry):
              else:
                 generatedClues.append(line)
          
-    
-
-    
 
     return generatedClues
+
+
