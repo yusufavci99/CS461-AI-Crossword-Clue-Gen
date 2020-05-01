@@ -1,82 +1,72 @@
-def clueGenerator(originalClue, entry):
+def createNewClue(originalClue, entry):
     
-          # -*- coding: utf-8 -*-
-    """
-    Created on Thu Apr 30 19:18:31 2020
-
-    @author: Mert Alagözlü v1.0
-    """
-
     from nltk.corpus import wordnet
-
-
-
+    
+    
+    
     try:
-        originalClue=[]
-        entry="carssqqq"
+        newClues=[]
         syns = wordnet.synsets(entry)
         plurality_check=syns[0].lemmas()[0].name()
         Plural=False
         if entry == plurality_check+"s" or entry == plurality_check+"es":
             Plural=True
-
+            
         possibleClue=syns[0].definition()
+        print(possibleClue)
         if len(possibleClue) != 0: 
             if Plural:
                 possibleClue = possibleClue + " (Plural)"
-                originalClue.append(possibleClue)
+                newClues.append(possibleClue)
             else:
-                originalClue.append(possibleClue)
-
+                newClues.append(possibleClue)
+            return newClues[0]
         else:
             print("no definition clues available")
-            originalClue=-1
-
-
-        print("Your clues so far:" + str(originalClue))
-
-
-
+            newClues=-1
+            
+        
+        print("Your clues so far:" + str(newClues))
+        
+        
+        
         possibleClue=syns[0].examples()
         if len(possibleClue) != 0: 
             line=possibleClue[0].split(" ") 
             print(line)
+            i=0
             for word in line:
+                i+=1
                 if word == entry:
-                    print(len(word))
-                    line[len(word)]="...."
+                    line[i-1]="...."
                 if word == plurality_check:
-                    print(len(word))
-                    line[len(word)]="...."
-
+                    line[i-1]="...."
+                    
             possibleClue=" "
             if Plural:
                 possibleClue = possibleClue.join(line)+ " (Plural)"
-                originalClue.append(possibleClue)
+                newClues.append(possibleClue)
+        
             else:
                 possibleClue = possibleClue.join(line)
-                originalClue.append(possibleClue)
-
+                newClues.append(possibleClue)
+                
+            return newClues[0]
+            
         else:
             print("no example clues available")
-            originalClue=-1
-            #return originalClue
-
-
-        print(originalClue)
+            newClues=-1
+            #return newClues
+            
+        
+        print(newClues)
     
-except:
-    print("Entry couldn't found in the wordnet")
-    originalClue=-1
+    except:
+         
+        print("Entry couldn't found in the wordnet, now searching in Wikipedia...")
+        newClues=-1
 
-
-
-    
+    return "error"
 # =============================================================================
-# print(possibleClue)
-# print("Your clues so far:" + str(originalClue))
+# print(clueGenerator(" ", "car"))
 # =============================================================================
-
-
-
-    return originalClue
