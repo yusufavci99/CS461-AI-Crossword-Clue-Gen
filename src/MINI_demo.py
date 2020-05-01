@@ -21,7 +21,7 @@ driver.get("https://www.nytimes.com/crosswords/game/mini")
 
 #popup close button element
 #waited until the button becomes clickable because if the program extracts the button to early, it doesn't work.
-popupOK = WebDriverWait(driver, 60).until(
+popupOK = WebDriverWait(driver, 120).until(
 EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div/div/div[4]/div/main/div[2]/div/div[2]/div[3]/div/article/div[2]/button/div")))
 
 popupOK.click()
@@ -130,6 +130,8 @@ for row in range(5):
 			ns = ''
 			if col - 1 < 0 or entries[row][col - 1] == '#':
 				for curc in range(col, 5):
+					if entries[row][curc][0] == '#':
+						break
 					ns += entries[row][curc][0]
 				across[acrossCounter].append(ns)
 				acrossCounter += 1
@@ -137,6 +139,8 @@ for row in range(5):
 			ns = ''
 			if row - 1 < 0 or entries[row - 1][col] == '#':
 				for curc in range(row, 5):
+					if entries[curc][col][0] == '#':
+						break
 					ns += entries[curc][col][0]
 				down[downCounter].append(ns)
 				downCounter += 1
