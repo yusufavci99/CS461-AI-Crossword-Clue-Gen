@@ -1,6 +1,6 @@
 def clueGenerator(originalClue, entry):
     
-        # -*- coding: utf-8 -*-
+       # -*- coding: utf-8 -*-
     """
     Created on Thu Apr 30 19:18:31 2020
     
