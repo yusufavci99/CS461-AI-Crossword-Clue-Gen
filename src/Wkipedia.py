@@ -146,10 +146,10 @@ if generate_noun_clue == 1:#  NYT RULE #2 'PART OF SPEECH'starts here for noun c
         if word.lower() == entry.lower():
             noun_phrase_element[i-1]="..."
             
-        if word.lower() == entry[:-1].lower():#Omitting when entry is plural but content of the sentence has singular form of the entry
+        if word[:-1].lower() == entry[:-1].lower():#Omitting when entry is plural but content of the sentence has singular form of the entry
             noun_phrase_element[i-1]="..."
                 
-        if word.lower() == entry[:-2].lower():#Omitting when entry is plural but content of the sentence has singular form of the entry
+        if word[:-2].lower() == entry[:-2].lower():#Omitting when entry is plural but content of the sentence has singular form of the entry
             noun_phrase_element[i-1]="..."
             
         if word.lower() == entry.lower() + "ing":
@@ -205,7 +205,7 @@ if generate_noun_clue == 1:#  NYT RULE #2 'PART OF SPEECH'starts here for noun c
      
     
     possibleClue = possibleClue.join(noun_phrase_element)
-    print(noun)
+    print(noun_phrase_element)
     newClues=possibleClue
     print('Possible Clue is: ' + possibleClue)
     #newClues.append(possibleClue)
@@ -266,10 +266,10 @@ if generate_noun_clue == 1:#  NYT RULE #2 'PART OF SPEECH'starts here for noun c
             if word.lower() == entry.lower():
                 noun_phrase_element[i-1]="..."
                 
-            if word.lower() == entry[:-1].lower():#Omitting when entry is plural but content of the sentence has singular form of the entry
+            if word[:-1].lower() == entry[:-1].lower():#Omitting when entry is plural but content of the sentence has singular form of the entry
                 noun_phrase_element[i-1]="..."
                 
-            if word.lower() == entry[:-2].lower():#Omitting when entry is plural but content of the sentence has singular form of the entry
+            if word[:-2].lower() == entry[:-2].lower():#Omitting when entry is plural but content of the sentence has singular form of the entry
                 noun_phrase_element[i-1]="..."
        
             if word.lower() == entry.lower() + "ing":
@@ -326,7 +326,7 @@ if generate_noun_clue == 1:#  NYT RULE #2 'PART OF SPEECH'starts here for noun c
         possibleClue = possibleClue.join(noun_phrase_element)
         
         if Plural:
-            newClues = possibleClue + '(Plural)'
+            newClues = possibleClue + ' (Plural)'
         newClues=possibleClue
         print('New Clue is: ' + newClues)
         #return newClues
