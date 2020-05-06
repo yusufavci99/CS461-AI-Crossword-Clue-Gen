@@ -17,7 +17,7 @@ entry_present_tense=0
 entry_past_tense=0
 entry_foreign_word=0
 generate_noun_clue=0
-entry="Chess"
+entry="Basketballs"
 tokenized_entry=nltk.word_tokenize(entry)
 token=nltk.pos_tag(tokenized_entry)
 for t in token:
@@ -139,12 +139,72 @@ if generate_noun_clue == 1:#  NYT RULE #2 'PART OF SPEECH'starts here for noun c
     possibleClue=""
     print('NOUN PHRASE ELEMENT')
     print(noun_phrase_element)
+    
+    i=0
+    for word in noun_phrase_element:#omit similar wordings
+        i+=1
+        if word.lower() == entry.lower():
+            noun_phrase_element[i-1]="..."
+            
+        if word.lower() == entry.lower() + "ing":
+            noun_phrase_element[i-1]="..."
+            
+        if word.lower() == entry.lower() + "ed":
+            noun_phrase_element[i-1]="..."
+    
+        if word.lower() == entry.lower() + "d":
+            noun_phrase_element[i-1]="..."
+            
+        if word.lower() == entry.lower() + "ly":
+            noun_phrase_element[i-1]="..."
+            
+        if word.lower() == entry.lower() + "lly":
+            noun_phrase_element[i-1]="..."
+            
+        if word.lower() == entry.lower() + "ally":
+            noun_phrase_element[i-1]="..."
+            
+        if word.lower() == entry.lower() + "able":
+            noun_phrase_element[i-1]="..."
+            
+        if word.lower() == entry.lower() + "ble":
+            noun_phrase_element[i-1]="..."
+            
+        if word.lower() == page_header.lower():
+            noun_phrase_element[i-1]="..."
+            
+        if word.lower() == page_header.lower() + "ing":
+            noun_phrase_element[i-1]="..."
+            
+        if word.lower() == page_header.lower() + "ed":
+            noun_phrase_element[i-1]="..."
+            
+        if word.lower() == page_header.lower() + "d":
+            noun_phrase_element[i-1]="..."
+        
+        if word.lower() == page_header.lower() + "ly":
+            noun_phrase_element[i-1]="..."
+            
+        if word.lower() == page_header.lower() + "lly":
+            noun_phrase_element[i-1]="..."
+            
+        if word.lower() == page_header.lower() + "ally":
+            noun_phrase_element[i-1]="..."
+            
+        if word.lower() == page_header.lower() + "able":
+            noun_phrase_element[i-1]="..."
+            
+        if word.lower() == page_header.lower() + "ble":
+            noun_phrase_element[i-1]="..."
+     
+    
     possibleClue = possibleClue.join(noun_phrase_element)
+    print(noun)
     newClues=possibleClue
     print('Possible Clue is: ' + possibleClue)
     #newClues.append(possibleClue)
     print(newClues)
-    if len(newClues) > 1:
+    if len(newClues) > 1:# if we can't find that means no JJ in the possible clue
         if Plural:
             newClues = possibleClue + '(Plural)'
         #return newClues
@@ -194,22 +254,92 @@ if generate_noun_clue == 1:#  NYT RULE #2 'PART OF SPEECH'starts here for noun c
         possibleClue=""
         print('NOUN PHRASE ELEMENT')
         print(noun_phrase_element)
+        i=0
+        for word in noun_phrase_element:#omit similar wordings
+            i+=1
+            if word.lower() == entry.lower():
+                noun_phrase_element[i-1]="..."
+                
+            if word.lower() == entry[:-1].lower():
+                noun_phrase_element[i-1]="..."
+                
+            if word.lower() == entry[:-2].lower():
+                noun_phrase_element[i-1]="..."
+       
+            if word.lower() == entry.lower() + "ing":
+                noun_phrase_element[i-1]="..."
+                
+            if word.lower() == entry.lower() + "ed":
+                noun_phrase_element[i-1]="..."
+        
+            if word.lower() == entry.lower() + "d":
+                noun_phrase_element[i-1]="..."
+                
+            if word.lower() == entry.lower() + "ly":
+                noun_phrase_element[i-1]="..."
+                
+            if word.lower() == entry.lower() + "lly":
+                noun_phrase_element[i-1]="..."
+                
+            if word.lower() == entry.lower() + "ally":
+                noun_phrase_element[i-1]="..."
+                
+            if word.lower() == entry.lower() + "able":
+                noun_phrase_element[i-1]="..."
+                
+            if word.lower() == entry.lower() + "ble":
+                noun_phrase_element[i-1]="..."
+                
+            if word.lower() == page_header.lower():
+                noun_phrase_element[i-1]="..."
+                
+            if word.lower() == page_header.lower() + "ing":
+                noun_phrase_element[i-1]="..."
+                
+            if word.lower() == page_header.lower() + "ed":
+                noun_phrase_element[i-1]="..."
+                
+            if word.lower() == page_header.lower() + "d":
+                noun_phrase_element[i-1]="..."
+            
+            if word.lower() == page_header.lower() + "ly":
+                noun_phrase_element[i-1]="..."
+                
+            if word.lower() == page_header.lower() + "lly":
+                noun_phrase_element[i-1]="..."
+                
+            if word.lower() == page_header.lower() + "ally":
+                noun_phrase_element[i-1]="..."
+                
+            if word.lower() == page_header.lower() + "able":
+                noun_phrase_element[i-1]="..."
+                
+            if word.lower() == page_header.lower() + "ble":
+                noun_phrase_element[i-1]="..."
+            
         possibleClue = possibleClue.join(noun_phrase_element)
+        
+        if Plural:
+            newClues = possibleClue + '(Plural)'
         newClues=possibleClue
-        print('Possible Clue is: ' + possibleClue)
+        print('New Clue is: ' + newClues)
         #return newClues
         
  
 elif generate_noun_clue == 0:
       
-
-
     possibleClue=" "
     i=0
     for word in tokenized_possible_clue:#omit similar wordings
         i+=1
         if word.lower() == entry.lower():
             tokenized_possible_clue[i-1]="..."
+            
+        if word.lower() == entry[:-1].lower():#Omitting when entry is plural but content of the sentence has singular form of the entry
+                noun_phrase_element[i-1]="..."
+                
+        if word.lower() == entry[:-2].lower():#Omitting when entry is plural but content of the sentence has singular form of the entry
+            noun_phrase_element[i-1]="..."
             
         if word.lower() == entry.lower() + "ing":
             tokenized_possible_clue[i-1]="..."
