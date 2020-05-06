@@ -24,7 +24,7 @@ for t in token:
     if t[1] == 'FW':# NYT RULE #4 CHECKING FOREIGN WORDS
         entry_foreign_word=1
         # check original clue
-    if t[1] == 'NNS'or t[1] == 'NNPS':
+    if t[1] == 'NNS'or t[1] == 'NNPS': #NYT RULE #3 CHECKING PLURALITY CONDITION
         Plural = 1
     
     if t[1] == 'VBD' or t[1] == 'VBN':# NYT RULE #1 TENSES MUST BE MATCHED, so we control the tense of the entry(word)
@@ -82,9 +82,9 @@ page_header_index=str(page).find("'")
 page_header=str(page)[page_header_index+1:-2]
 page_header=page_header.lower()
 
-Plural=False# NYT RULE #3 CHECKING PLURALITY CONDITION
+# NYT RULE #3 CHECKING PLURALITY CONDITION
 if entry.lower() == page_header + 's' or entry.lower() == page_header + 'es':
-    Plural=True
+    Plural = 1
 
 
 tokens_tag = nltk.pos_tag(tokenized_possible_clue)
