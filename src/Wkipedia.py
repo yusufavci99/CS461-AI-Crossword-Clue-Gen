@@ -146,6 +146,12 @@ if generate_noun_clue == 1:#  NYT RULE #2 'PART OF SPEECH'starts here for noun c
         if word.lower() == entry.lower():
             noun_phrase_element[i-1]="..."
             
+        if word.lower() == entry[:-1].lower():#Omitting when entry is plural but content of the sentence has singular form of the entry
+            noun_phrase_element[i-1]="..."
+                
+        if word.lower() == entry[:-2].lower():#Omitting when entry is plural but content of the sentence has singular form of the entry
+            noun_phrase_element[i-1]="..."
+            
         if word.lower() == entry.lower() + "ing":
             noun_phrase_element[i-1]="..."
             
@@ -260,10 +266,10 @@ if generate_noun_clue == 1:#  NYT RULE #2 'PART OF SPEECH'starts here for noun c
             if word.lower() == entry.lower():
                 noun_phrase_element[i-1]="..."
                 
-            if word.lower() == entry[:-1].lower():
+            if word.lower() == entry[:-1].lower():#Omitting when entry is plural but content of the sentence has singular form of the entry
                 noun_phrase_element[i-1]="..."
                 
-            if word.lower() == entry[:-2].lower():
+            if word.lower() == entry[:-2].lower():#Omitting when entry is plural but content of the sentence has singular form of the entry
                 noun_phrase_element[i-1]="..."
        
             if word.lower() == entry.lower() + "ing":
@@ -336,10 +342,10 @@ elif generate_noun_clue == 0:
             tokenized_possible_clue[i-1]="..."
             
         if word.lower() == entry[:-1].lower():#Omitting when entry is plural but content of the sentence has singular form of the entry
-                noun_phrase_element[i-1]="..."
+            tokenized_possible_clue[i-1]="..."
                 
         if word.lower() == entry[:-2].lower():#Omitting when entry is plural but content of the sentence has singular form of the entry
-            noun_phrase_element[i-1]="..."
+            tokenized_possible_clue[i-1]="..."
             
         if word.lower() == entry.lower() + "ing":
             tokenized_possible_clue[i-1]="..."
