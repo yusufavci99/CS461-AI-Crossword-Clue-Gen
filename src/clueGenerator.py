@@ -92,7 +92,7 @@ def createNewClue(originalClue, entry):
             if t[1] == 'VBP' or t[1] == 'VBZ':# NYT RULE #1 TENSES MUST BE MATCHED, so we control the tense of the entry(word)
                 entry_present_tense=1
                 print('Entry tense is present tense')
-            if t[1].find('NN') == 0 or t[1].find('NNS') == 0 or t[1].find('NNP') == 0:# given entry must corresponds to noun as well. Rule #2 NYT "PART OF SPEECH"
+            if t[1].find('NN') == 0 or t[1].find('NNS') == 0 or t[1].find('NNP') == 0:#Rule #2 NYT "PART OF SPEECH", given entry must corresponds to noun as well. 
                 generate_noun_clue=1
                 print('generating a noun clue')
                 
