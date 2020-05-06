@@ -11,17 +11,22 @@ import wikipedia
 from nltk import pos_tag
 from nltk import RegexpParser
 newClues=[]
+
+Plural = 0
 entry_present_tense=0
 entry_past_tense=0
 entry_foreign_word=0
 generate_noun_clue=0
-entry="Garden"
+entry="Chess"
 tokenized_entry=nltk.word_tokenize(entry)
 token=nltk.pos_tag(tokenized_entry)
 for t in token:
     if t[1] == 'FW':# NYT RULE #4 CHECKING FOREIGN WORDS
         entry_foreign_word=1
-        #return -1 check original clue
+        # check original clue
+    if t[1] == 'NNS'or t[1] == 'NNPS':
+        Plural = 1
+    
     if t[1] == 'VBD' or t[1] == 'VBN':# NYT RULE #1 TENSES MUST BE MATCHED, so we control the tense of the entry(word)
         entry_past_tense=1
         print('Entry tense is past tense')
@@ -99,129 +104,188 @@ if generate_noun_clue == 1:#  NYT RULE #2 'PART OF SPEECH'starts here for noun c
     for parse in tokens_tag:# We successfully implement a meaninggul noun phrase for noun entry
         
         print(parse)
-        
-        if parse[1] == 'NN' and IN_available == 1:
-            noun_phrase_element.append(parse[0] + ',')
-            print('NN')
-            print(parse[1])
-            
+                  
         if parse[1] == 'JJ':
             noun_phrase_element.append(parse[0] + ' ')
             JJ_available=1
             print(parse[1])
-            print('JJ_available')
-        if parse[1] == 'NN'and JJ_available == 1 and NN_cnt!=2:
+            print('Starting with adding JJ to the noun phrase...')
+        if parse[1] == 'NN'and JJ_available == 1:
             noun_phrase_element.append(parse[0] + ' ')
             NN_available=1
             NN_cnt+=1
-            print('NN')
+            print('Continuing with adding NN into the noun phrase if JJ is available...')
             print(parse[1])
         if parse[1] == 'NNS'and NN_available == 0 and JJ_available == 1 and NN_cnt!=2:
             noun_phrase_element.append(parse[0] + ' ')
             NNS_available=1
-            NN_cnt+=1
-            print('NNS')
+            print('Continuing with adding NNS into the noun phrase if JJ is available but NN is not available...')
             print(parse[1])
             
         if parse[1] == 'IN'  and (NNS_available == 1 or NN_available == 1):
             noun_phrase_element.append(parse[0] + ' ')
             IN_available=1
-            print('IN')
+            print('Continuing with adding IN into the noun phrase if NN or NNS is available...')
             print(parse[1])
             
-        if JJ_available == 1 and (NNS_available == 1 or NN_available == 1) and IN_available == 1:
-            newClues.append(noun_phrase_element)
+        if JJ_available == 1 and (NNS_available == 1 or NN_available == 1) and IN_available == 1 and NN_cnt==3:
+            #newClues.append(noun_phrase_element)
             JJ_available=0
             NN_available=0
             NNS_available=0
+            print(NN_cnt)
+            break
+    
+    possibleClue=""
+    print('NOUN PHRASE ELEMENT')
+    print(noun_phrase_element)
+    possibleClue = possibleClue.join(noun_phrase_element)
+    newClues=possibleClue
+    print('Possible Clue is: ' + possibleClue)
+    #newClues.append(possibleClue)
+    print(newClues)
+    if len(newClues) > 1:
+        if Plural:
+            newClues = possibleClue + '(Plural)'
+        #return newClues
+        print('New clue found!')
+        
+    else:# JJ is not in the sentence then, start with NN or NNS to build noun phrase
+        print('Starting the search without JJ element...')
+        NN_available=0
+        NNS_available=0
+        IN_available=0
+        NN_cnt=1
+        for parse in tokens_tag:# We successfully implement a meaninggul noun phrase for noun entry
             
+            print(parse)# parsing each tokens
+    
+            if parse[1] == 'NN' and NN_cnt!=2:
+                noun_phrase_element.append(parse[0] + ' ')
+                NN_available=1
+                NN_cnt+=1
+                print('Continuing with adding NN into the noun phrase if JJ is available...')
+                print(parse[1])
+            if parse[1] == 'NNS'and NN_available == 0 and NN_cnt!=2:
+                noun_phrase_element.append(parse[0] + ' ')
+                NNS_available=1
+                NN_cnt+=1
+                print('Continuing with adding NNS into the noun phrase if JJ is available but NN is not available...')
+                print(parse[1])
+                
+            if parse[1] == 'IN'  and (NNS_available == 1 or NN_available == 1):
+                noun_phrase_element.append(parse[0] + ' ')
+                IN_available=1
+                print('Continuing with adding IN into the noun phrase if NN or NNS is available...')
+                print(parse[1])
+                
+            if parse[1] == 'NNP' and IN_available == 1:
+                noun_phrase_element.append(parse[0] + ' ')
+                print('Found IN, finding NN word...')
+                print(parse[1])
+                IN_available=0
+                
+            if (NNS_available == 1 or NN_available == 1) and IN_available == 1:
+                #newClues.append(noun_phrase_element)
+                NN_available=0
+                NNS_available=0
+                #IN_available=1
+        newClues=[]
+        possibleClue=""
+        print('NOUN PHRASE ELEMENT')
+        print(noun_phrase_element)
+        possibleClue = possibleClue.join(noun_phrase_element)
+        newClues=possibleClue
+        print('Possible Clue is: ' + possibleClue)
+        #return newClues
+        
+ 
+elif generate_noun_clue == 0:
+      
+
+
+    possibleClue=" "
+    i=0
+    for word in tokenized_possible_clue:#omit similar wordings
+        i+=1
+        if word.lower() == entry.lower():
+            tokenized_possible_clue[i-1]="..."
             
-           
-
-        # to find nth occurrence of substring 
-
-
-possibleClue=" "
-i=0
-for word in tokenized_possible_clue:#omit similar wordings
-    i+=1
-    if word.lower() == entry.lower():
-        tokenized_possible_clue[i-1]="..."
-        
-    if word.lower() == entry.lower() + "ing":
-        tokenized_possible_clue[i-1]="..."
-        
-    if word.lower() == entry.lower() + "ed":
-        tokenized_possible_clue[i-1]="..."
-
-    if word.lower() == entry.lower() + "d":
-        tokenized_possible_clue[i-1]="..."
-        
-    if word.lower() == entry.lower() + "ly":
-        tokenized_possible_clue[i-1]="..."
-        
-    if word.lower() == entry.lower() + "lly":
-        tokenized_possible_clue[i-1]="..."
-        
-    if word.lower() == entry.lower() + "ally":
-        tokenized_possible_clue[i-1]="..."
-        
-    if word.lower() == entry.lower() + "able":
-        tokenized_possible_clue[i-1]="..."
-        
-    if word.lower() == entry.lower() + "ble":
-        tokenized_possible_clue[i-1]="..."
-        
-    if word.lower() == page_header.lower():
-        tokenized_possible_clue[i-1]="..."
-        
-    if word.lower() == page_header.lower() + "ing":
-        tokenized_possible_clue[i-1]="..."
-        
-    if word.lower() == page_header.lower() + "ed":
-        tokenized_possible_clue[i-1]="..."
-        
-    if word.lower() == page_header.lower() + "d":
-        tokenized_possible_clue[i-1]="..."
+        if word.lower() == entry.lower() + "ing":
+            tokenized_possible_clue[i-1]="..."
+            
+        if word.lower() == entry.lower() + "ed":
+            tokenized_possible_clue[i-1]="..."
     
-    if word.lower() == page_header.lower() + "ly":
-        tokenized_possible_clue[i-1]="..."
+        if word.lower() == entry.lower() + "d":
+            tokenized_possible_clue[i-1]="..."
+            
+        if word.lower() == entry.lower() + "ly":
+            tokenized_possible_clue[i-1]="..."
+            
+        if word.lower() == entry.lower() + "lly":
+            tokenized_possible_clue[i-1]="..."
+            
+        if word.lower() == entry.lower() + "ally":
+            tokenized_possible_clue[i-1]="..."
+            
+        if word.lower() == entry.lower() + "able":
+            tokenized_possible_clue[i-1]="..."
+            
+        if word.lower() == entry.lower() + "ble":
+            tokenized_possible_clue[i-1]="..."
+            
+        if word.lower() == page_header.lower():
+            tokenized_possible_clue[i-1]="..."
+            
+        if word.lower() == page_header.lower() + "ing":
+            tokenized_possible_clue[i-1]="..."
+            
+        if word.lower() == page_header.lower() + "ed":
+            tokenized_possible_clue[i-1]="..."
+            
+        if word.lower() == page_header.lower() + "d":
+            tokenized_possible_clue[i-1]="..."
         
-    if word.lower() == page_header.lower() + "lly":
-        tokenized_possible_clue[i-1]="..."
-        
-    if word.lower() == page_header.lower() + "ally":
-        tokenized_possible_clue[i-1]="..."
-        
-    if word.lower() == page_header.lower() + "able":
-        tokenized_possible_clue[i-1]="..."
-        
-    if word.lower() == page_header.lower() + "ble":
-        tokenized_possible_clue[i-1]="..."
-        
-if page_header.find(entry.lower()) == -1 and entry_past_tense==0 and entry_present_tense==0:# if we can't find entry on the page title in wikipedia return -1
-    print("Invalid output")
-    #return -1
-
-
-        
-if entry_present_tense==1:
-    possibleClue = possibleClue.join(tokenized_possible_clue)
-    possibleCLue= possibleClue + "(Present)"
-elif entry_past_tense==1:
-    possibleClue = possibleClue.join(tokenized_possible_clue)
-    possibleClue= possibleClue + "(Past)"
-elif Plural:
-    possibleClue = possibleClue.join(tokenized_possible_clue)
-    possibleClue= possibleClue + "(Plural)"
+        if word.lower() == page_header.lower() + "ly":
+            tokenized_possible_clue[i-1]="..."
+            
+        if word.lower() == page_header.lower() + "lly":
+            tokenized_possible_clue[i-1]="..."
+            
+        if word.lower() == page_header.lower() + "ally":
+            tokenized_possible_clue[i-1]="..."
+            
+        if word.lower() == page_header.lower() + "able":
+            tokenized_possible_clue[i-1]="..."
+            
+        if word.lower() == page_header.lower() + "ble":
+            tokenized_possible_clue[i-1]="..."
+            
+    # =============================================================================
+    # if page_header.find(entry.lower()) == -1 and entry_past_tense==0 and entry_present_tense==0:# if we can't find entry on the page title in wikipedia return -1
+    #     print("Invalid output")
+    #     #return -1
+    # =============================================================================
     
     
-                                     
-
-#possibleClue = possibleClue.join(tokenized_possible_clue)
-
-newClues.append(possibleClue)
-print(newClues)
+            
+    if entry_present_tense==1:
+        possibleClue = possibleClue.join(tokenized_possible_clue)
+        possibleCLue= possibleClue + "(Present)"
+    elif entry_past_tense==1:
+        possibleClue = possibleClue.join(tokenized_possible_clue)
+        possibleClue= possibleClue + "(Past)"
+    elif Plural:
+        possibleClue = possibleClue.join(tokenized_possible_clue)
+        possibleClue= possibleClue + "(Plural)"
+        
+                                
+    
+    possibleClue = possibleClue.join(tokenized_possible_clue)
+    
+    newClues=possibleClue
+#return newClues
 # =============================================================================
 # x=0
 # for n in range(1,3):#get only first 3 occurences
@@ -277,9 +341,7 @@ print(newClues)
 #             possibleClue = possibleClue.join(line)
 #             newClues.append(possibleClue)
 # =============================================================================
-            
-print(newClues)
-    
+
     
 
 
