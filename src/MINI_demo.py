@@ -146,6 +146,10 @@ for row in range(5):
 				downCounter += 1
 
 all = across + down
+print('========')
+print(all)
+print('========')
+
 for riddle in all:
 	riddle.append(clueGen.createNewClue(riddle[1], riddle[2]))
 
@@ -156,6 +160,8 @@ print(down)
 
 # Creating the empty frame
 master = Tk()
+master.lift()
+master.attributes("-topmost", True)
 master.title('MINI - Project Demo 1')
 #A suitable size for our GUI
 master.geometry("1200x600")
