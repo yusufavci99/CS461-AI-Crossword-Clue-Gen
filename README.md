@@ -1,6 +1,6 @@
 # Crossword Clue Generator - CS461 Final Project
 
-This program generates new clues for daily NYT mini crossword puzzle by Joel Fagliano.
+This program generates new clues for daily NYT mini crossword puzzle by Joel Fagliano. Uses web scraping from dictionaries and Wikipedia for finding a clue template and uses NLP to create a short realistic clue from that template.
 
 ## Getting Started
 
@@ -10,7 +10,7 @@ Program runs by just running MINI_demo.py in src. Note that there are some depen
 
 * **Tkinter**
 
-Used to create a simple GUI.
+Used to create a GUI.
 * **Selenium**
 
 Used to get the puzzle from the nyt mini website.
