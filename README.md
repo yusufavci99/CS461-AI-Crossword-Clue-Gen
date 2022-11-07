@@ -31,8 +31,6 @@ Gets the date from the internet and creates the GUI.
 
 Generates a new clue by using the original clue and the answer (entry).
 
-## Alpha Image (Not creating the new clues, yet... hopefully)
-![Sample Image](https://raw.githubusercontent.com/yusufavci99/CS461-Final/master/documentation/image/alphaimage.PNG?token=AHKGJO3FCOTHRAV3JJVTEYK6WBZVY)
 ## Authors
 
 CS-461 MINI Project Team
